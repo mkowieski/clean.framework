@@ -6,9 +6,12 @@
 
 namespace app\controller;
 
+use Zend\Http\Request;
+
 class HomeController
 {
-    public function indexAction() {
-
+    public function indexAction(Request $request)
+    {
+        // @TODO check request
     }
 }

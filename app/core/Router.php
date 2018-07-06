@@ -26,12 +26,21 @@ class Router
 
     private $console;
 
+    private $server;
+
+    private $controller;
+
+    private $method;
+
+    private $queryParams;
+
     /**
      * Router constructor.
      */
     public function __construct()
     {
         $this->loadRouterFiles();
+        $this->server = $_SERVER;
         $session = $this->getSession();
         switch ($session) {
             case self::WEB_SESSION:
@@ -46,26 +55,87 @@ class Router
         }
     }
 
+    /**
+     * @return mixed
+     */
+    public function getController()
+    {
+        return $this->controller;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMethod()
+    {
+        return $this->method;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getQueryParams()
+    {
+        return $this->queryParams;
+    }
+
     private function getSession() {
         if (!empty($_SERVER["SESSIONNAME"]) && $_SERVER["SESSIONNAME"] == self::CONSOLE_SESSION_NAME)
             return self::CONSOLE_SESSION;
 
+        // @TODO check API session
 
         return self::WEB_SESSION;
     }
 
+    public function getRequestMethod()
+    {
+        return $this->server["REQUEST_METHOD"];
+    }
+
+    private function getRequestUri()
+    {
+        $uri = $this->server["REQUEST_URI"];
+        $exUri = explode("?", $uri);
+
+        if (count($exUri) == 1)
+            return $uri;
+
+        parse_str($exUri[1], $this->queryParams);
+
+        return $exUri[0];
+    }
+
     private function checkWebRoute()
     {
-        print_r($this->web);
+        $requestUri = $this->getRequestUri();
+
+        if (!array_key_exists($requestUri, $this->web))
+            throw new \RouteNotFoundException();
+
+        if (!in_array($this->getRequestMethod(), $this->web[$requestUri]["method"]))
+            throw new \InvalidRouteMethodException();
+
+        $action = explode("@", $this->web[$requestUri]["action"]);
+        $this->controller = $action[0];
+        $this->method = $action[1] . "Action";
     }
 
     private function checkApiRoute()
     {
-        print_r($this->web);
+        $requestUri = $this->getRequestUri();
+
+        if (!array_key_exists($requestUri, $this->web))
+            throw new \RouteNotFoundException();
+
+        if (!in_array($this->getRequestMethod(), $this->web[$requestUri]["method"]))
+            throw new \InvalidRouteMethodException();
     }
 
     private function checkConsoleRoute()
     {
+        // @TODO console routes
+
         print_r($this->console);
     }
 

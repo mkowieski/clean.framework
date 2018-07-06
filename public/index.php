@@ -7,6 +7,7 @@
 use app\core\App;
 use app\core\Router;
 
+require_once "../vendor/autoload.php";
 require_once "globals.php";
 require_once "autoload.php";
 
