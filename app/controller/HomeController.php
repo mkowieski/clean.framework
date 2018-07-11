@@ -11,11 +11,15 @@ use Zend\Http\Request;
 
 class HomeController
 {
-    public function indexAction(Request $request)
+    public function indexAction(Request $request, $test, $dwa)
     {
         // @TODO check request
 
+        print_r($test);
+        print_r($dwa);
+
         $view = new View();
+        $view->setLayout("test");
 
         return $view->render("home.index");
     }

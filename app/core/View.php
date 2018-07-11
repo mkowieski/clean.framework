@@ -17,11 +17,6 @@ class View
 
     public $content;
 
-    public static function asset($asset)
-    {
-        echo $asset;
-    }
-
     public function setLayout($layout)
     {
         $this->layout = $layout;

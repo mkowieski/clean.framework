@@ -74,8 +74,12 @@ class Router
     /**
      * @return mixed
      */
-    public function getQueryParams()
+    public function getParams()
     {
+        // @TODO get params from route
+        $this->queryParams = ["test", "dwa"];
+
+
         return $this->queryParams;
     }
 

@@ -17,11 +17,14 @@ class App
 
     private $method;
 
+    private $params = [];
+
     public function __construct(Router $router)
     {
         $this->router = $router;
         $this->controller = $router->getController();
         $this->method = $router->getMethod();
+        $this->params = $router->getParams();
     }
 
     public function run()
@@ -35,7 +38,8 @@ class App
         if (!method_exists($this->controller, $this->method))
             throw new \MethodNotFoundException();
 
+        array_unshift($this->params, new Request());
 
-        call_user_func([$this->controller, $this->method], new Request());
+        call_user_func_array([$this->controller, $this->method], $this->params);
     }
 }
