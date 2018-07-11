@@ -6,6 +6,7 @@
 
 namespace app\controller;
 
+use app\core\View;
 use Zend\Http\Request;
 
 class HomeController
@@ -13,5 +14,9 @@ class HomeController
     public function indexAction(Request $request)
     {
         // @TODO check request
+
+        $view = new View();
+
+        return $view->render("home.index");
     }
 }

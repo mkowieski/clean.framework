@@ -9,6 +9,11 @@ class Globals {
     {
         return dirname(__DIR__);
     }
+
+    public static function asset($asset)
+    {
+        echo $asset;
+    }
 }
 
 
