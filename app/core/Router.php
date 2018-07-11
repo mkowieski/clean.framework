@@ -114,6 +114,14 @@ class Router
     {
         $requestUri = $this->getRequestUri();
 
+        // @TODO set params from route
+        $text = '/test/{name}/{id}';
+        preg_match_all("/{(\\w*)}/", $text, $matches);
+
+        if (count($matches[1]) > 0) {
+            // set params
+        }
+
         if (!array_key_exists($requestUri, $this->web))
             throw new \RouteNotFoundException();
 
