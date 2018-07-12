@@ -110,17 +110,44 @@ class Router
         return $exUri[0];
     }
 
+    private function matchRoute(array $requestKeys, array $routeKeys, $index = 0, $route = null)
+    {
+        if (isset($requestKeys[$index]) && isset($routeKeys[$index])) {
+            echo "Comparing '$requestKeys[$index]' and '$routeKeys[$index]' <br>";
+
+            if ($requestKeys[$index] == $routeKeys[$index]) {
+                $route .= "/" . $routeKeys[$index];
+
+                return $this->matchRoute($requestKeys, $routeKeys, ++$index, $route);
+            } else {
+
+            }
+        }
+
+//        // @TODO set params from route
+//        $text = '/test/{name}/{id}';
+//        preg_match_all("/{(\\w*)}/", $text, $matches);
+//
+//        if (count($matches[1]) > 0) {
+//            // set params
+//        }
+
+        return $route;
+    }
+
     private function checkWebRoute()
     {
         $requestUri = $this->getRequestUri();
 
-        // @TODO set params from route
-        $text = '/test/{name}/{id}';
-        preg_match_all("/{(\\w*)}/", $text, $matches);
+        $matchedRoutes = null;
+        foreach (array_keys($this->web) as $key) {
+            $routeKeys = explode("/", $key);
+            $matchedRoutes[] = $this->matchRoute(explode("/", $requestUri), $routeKeys);
 
-        if (count($matches[1]) > 0) {
-            // set params
+//            print_r($matchedRoutes);
         }
+
+        die;
 
         if (!array_key_exists($requestUri, $this->web))
             throw new \RouteNotFoundException();

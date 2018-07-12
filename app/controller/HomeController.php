@@ -23,4 +23,11 @@ class HomeController
 
         return $view->render("home.index");
     }
+
+    public function getUserAction(Request $request, $id)
+    {
+        // @TODO check request
+
+        print_r($id);
+    }
 }
